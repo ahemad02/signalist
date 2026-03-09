@@ -15,17 +15,14 @@ import { Button } from "@/components/ui/button";
 import { LogOutIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { signOut } from "@/lib/actions/auth.actions";
 
-export const UserDropDown = () => {
+export const UserDropDown = ({ user }: { user: User }) => {
   const router = useRouter();
 
   const handleSignOut = async () => {
+    await signOut();
     router.push("/sign-in");
-  };
-
-  const user = {
-    name: "John Doe",
-    email: "aungminthein@gmail.com",
   };
 
   return (
