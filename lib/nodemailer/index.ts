@@ -14,10 +14,18 @@ export const sendWelcomeEmail = async ({
   name,
   intro,
 }: WelcomeEmailData) => {
-  const htmlTemplate = WELCOME_EMAIL_TEMPLATE.replace("{{name}}", name).replace(
-    "{{intro}}",
-    intro,
-  );
+  const escapeHtml = (value: string) =>
+    value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+
+  const htmlTemplate = WELCOME_EMAIL_TEMPLATE.replace(
+    "{{name}}",
+    escapeHtml(name),
+  ).replace("{{intro}}", escapeHtml(intro));
 
   const mailOptions = {
     from: `"Signalist" <signalist@jsmastery.pro>`,

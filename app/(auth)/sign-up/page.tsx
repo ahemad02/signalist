@@ -11,7 +11,6 @@ import {
 } from "@/lib/constants";
 import { CountrySelectField } from "@/components/forms/CountrySelectField";
 import FooterLink from "@/components/forms/FooterLink";
-// import { signUpWithEmail } from "@/lib/actions/auth.actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { signUpWithEmail } from "@/lib/actions/auth.actions";
@@ -40,10 +39,15 @@ const SignUp = () => {
     try {
       const result = await signUpWithEmail(data);
 
-      if (result.success) {
-        toast.success("Sign up successful");
-        router.push("/");
+      if (!result.success) {
+        toast.error("Sign up failed", {
+          description: result.error ?? "Failed to create an account.",
+        });
+        return;
       }
+
+      toast.success("Sign up successful");
+      router.push("/");
     } catch (e) {
       console.error(e);
       toast.error("Sign up failed", {
@@ -75,9 +79,11 @@ const SignUp = () => {
           register={register}
           error={errors.email}
           validation={{
-            required: "Email name is required",
-            pattern: /^\w+@\w+\.\w+$/,
-            message: "Email address is required",
+            required: "Email is required",
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: "Enter a valid email address",
+            },
           }}
         />
 
