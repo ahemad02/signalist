@@ -233,6 +233,11 @@ declare global {
     tradingViewSymbol?: string;
   };
 
+  type FinnhubSearchResponse = {
+    count: number;
+    result: FinnhubSearchResult[];
+  };
+
   type FinnhubSearchResult = {
     symbol: string;
     description: string;
