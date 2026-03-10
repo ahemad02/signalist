@@ -11,7 +11,7 @@ export const getWatchlistSymbolsByEmail = async (
     const db = mongoose.connection.db;
     if (!db) throw new Error("Database connection failed");
 
-    const user = await db.collection("users").findOne({ email });
+    const user = await db.collection("user").findOne({ email });
     if (!user) return [];
 
     const userId = user.id || user._id?.toString();

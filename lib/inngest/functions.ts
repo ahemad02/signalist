@@ -86,7 +86,10 @@ export const sendDailyNewsSummary = inngest.createFunction(
           }
           perUser.push({ user, articles });
         } catch (e) {
-          console.error("daily-news: error preparing user news", user.email, e);
+          console.error("daily-news: error preparing user news", {
+            userId: user.id,
+            error: e,
+          });
           perUser.push({ user, articles: [] });
         }
       }
@@ -107,7 +110,7 @@ export const sendDailyNewsSummary = inngest.createFunction(
           JSON.stringify(articles, null, 2),
         );
 
-        const response = await step.ai.infer(`summarize-news-${user.email}`, {
+        const response = await step.ai.infer(`summarize-news-${user.id}`, {
           model: step.ai.models.gemini({ model: "gemini-2.5-flash-lite" }),
           body: {
             contents: [{ role: "user", parts: [{ text: prompt }] }],
@@ -120,25 +123,26 @@ export const sendDailyNewsSummary = inngest.createFunction(
 
         userNewsSummaries.push({ user, newsContent });
       } catch (e) {
-        console.error("Failed to summarize news for : ", user.email);
+        console.error("Failed to summarize news", {
+          userId: user.id,
+          error: e,
+        });
         userNewsSummaries.push({ user, newsContent: null });
       }
     }
 
     // Step #4: (placeholder) Send the emails
-    await step.run("send-news-emails", async () => {
-      await Promise.all(
-        userNewsSummaries.map(async ({ user, newsContent }) => {
-          if (!newsContent) return false;
+    for (const { user, newsContent } of userNewsSummaries) {
+      if (!newsContent) continue;
 
-          return await sendNewsSummaryEmail({
-            email: user.email,
-            date: getFormattedTodayDate(),
-            newsContent,
-          });
-        }),
-      );
-    });
+      await step.run(`send-news-email-${user.id}`, async () => {
+        await sendNewsSummaryEmail({
+          email: user.email,
+          date: getFormattedTodayDate(),
+          newsContent,
+        });
+      });
+    }
 
     return {
       success: true,
