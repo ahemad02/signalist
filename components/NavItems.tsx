@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { NAV_ITEMS } from "@/lib/constants";
 import { usePathname } from "next/navigation";
 import SearchCommand from "./SearchCommand";
@@ -36,7 +37,7 @@ export const NavItems = ({
             key={label}
             className={`cursor-pointer transition-colors hover:text-yellow-500 ${isActive(href) ? "text-gray-100" : ""}`}
           >
-            {label}
+            <Link href={href}>{label}</Link>
           </li>
         );
       })}
