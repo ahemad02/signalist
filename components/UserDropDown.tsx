@@ -17,7 +17,13 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { signOut } from "@/lib/actions/auth.actions";
 
-export const UserDropDown = ({ user }: { user: User }) => {
+export const UserDropDown = ({
+  user,
+  initialStocks,
+}: {
+  user: User;
+  initialStocks: StockWithWatchlistStatus[];
+}) => {
   const router = useRouter();
 
   const handleSignOut = async () => {
@@ -65,7 +71,7 @@ export const UserDropDown = ({ user }: { user: User }) => {
         <DropdownMenuSeparator className="bg-gray-600" />
         <DropdownMenuItem className="block focus:bg-transparent sm:hidden">
           <nav>
-            <NavItems />
+            <NavItems initialStocks={initialStocks} />
           </nav>
         </DropdownMenuItem>
         <DropdownMenuSeparator className="sm:hidden" />
