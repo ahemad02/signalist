@@ -218,7 +218,7 @@
     @apply !bg-gray-800 lg:min-w-[800px] border-gray-600 fixed top-10 left-1/2 -translate-x-1/2 translate-y-10;
   }
   .search-field {
-    @apply !bg-gray-800 border-b border-gray-600 relative;
+    @apply !bg-none border-b border-gray-600 relative;
   }
   .search-list {
     @apply !bg-gray-800 max-h-[400px];
