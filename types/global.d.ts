@@ -86,6 +86,24 @@ declare global {
     }>;
   };
 
+  type QuoteData = {
+    c?: number;
+    dp?: number;
+  };
+
+  type ProfileData = {
+    name?: string;
+    marketCapitalization?: number;
+  };
+
+  type FinancialsData = {
+    metric?: { [key: string]: number };
+  };
+
+  type WatchlistTableProps = {
+    watchlist: StockWithData[];
+  };
+
   type SearchCommandProps = {
     renderAs?: "button" | "text";
     label?: string;
